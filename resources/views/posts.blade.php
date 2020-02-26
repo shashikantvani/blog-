@@ -9,9 +9,14 @@
       @foreach($posts as $post)
         <div class="col-sm-4">
           <div class="well">
-           <a href="{{ url('editpost') }}/{{ $post->slug }}">Edit</a>
-          	<a href="{{ url('post') }}/{{ $post->slug }}">Details</a>
-          	<a href="{{ url('delete') }}/{{ $post->slug }}">Delete</a>
+          
+          	 <a href="{{ url('post') }}/{{ $post->slug }}">Details</a>
+              @if(Auth::user()->user_role==3)
+               <a href="{{ url('editpost') }}/{{ $post->slug }}">Edit</a>
+           
+            <a href="{{ url('delete') }}/{{ $post->slug }}">Delete</a>
+            @endif
+            
           	
             <p>{{ $post->title }}</p> 
            <!--  <p>{{$post->description }}</p>  -->
