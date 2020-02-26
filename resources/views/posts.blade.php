@@ -11,7 +11,7 @@
           <div class="well">
           
           	 <a href="{{ url('post') }}/{{ $post->slug }}">Details</a>
-              @if(Auth::user()->user_role==3)
+              @if(Auth::user()->user_role!=3)
                <a href="{{ url('editpost') }}/{{ $post->slug }}">Edit</a>
            
             <a href="{{ url('delete') }}/{{ $post->slug }}">Delete</a>

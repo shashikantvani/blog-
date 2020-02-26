@@ -7,6 +7,15 @@
 <p style="color:green;">
   {{ \Session::get('success') }}
 </p>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <form class="form-inline" action="{{ url('/')}}/createpost" method="post" enctype="multipart/form-data">
 @csrf
 <input type="hidden" name="id" value="0">

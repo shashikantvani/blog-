@@ -36,3 +36,5 @@ Route::get('/editpost/{id}', 'HomeController@editpost')->name('editpost');
 Route::get('/post/{id}', 'HomeController@post')->name('post');
 
 Route::get('/delete/{id}', 'HomeController@delete')->name('delete');
+
+Route::get('/users', 'HomeController@users')->name('users');

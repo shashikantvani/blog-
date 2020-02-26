@@ -7,6 +7,9 @@ use Auth;
 use Illuminate\Support\Facades\DB;
 use Image;
 use Session;
+use App\User;
+use App\Role;
+
 
 class HomeController extends Controller
 {
@@ -34,6 +37,15 @@ class HomeController extends Controller
         return view('home',['user_count'=>$users,'post_count'=>$posts]);
     }
 
+    public function users(){
+
+       $users=User::where('user_role','!=',1)->get();
+
+       return view('users',['users'=>$users]);
+
+
+    }
+
     public function roles()
     {
       
@@ -41,7 +53,8 @@ class HomeController extends Controller
     }
 
     public function getpermission($id){
-        $menus=DB::table('menu')->where('status',1)->get();
+      
+        $menus=Role::where('status',1)->get();
 
         foreach($menus as $menu){
            $permission= DB::table('menu_permission')->where('menu_id',$menu->id)->where('role_id',$id)->where('status',1)->first();
@@ -64,12 +77,18 @@ class HomeController extends Controller
 
 
     function addPermission(Request $request){
+
        $permission=$request->input('permissions');
         $role_id=$request->input('role_id');
+
+        if(!empty($permission)){
+
+        
 
         DB::table('menu_permission')->where('role_id',$role_id)->update(['status'=>0]);
        
        foreach ($permission as  $value) {
+
           $check= DB::table('menu_permission')->where('menu_id',$value)->where('role_id',$role_id)->first();
 
           if(!empty($check)){
@@ -81,11 +100,16 @@ class HomeController extends Controller
              DB::table('menu_permission')->insert(['menu_id'=>$value,'role_id'=>$role_id,'status'=>1]);
 
           }
+
        }
        
           return back()
             ->with('success','You have successfully Save Permission.');
       // return redirect('roles');
+          }else{
+              return back()
+            ->with('success','Please Select At least one ');
+          }  
 
     }
 
@@ -114,9 +138,10 @@ class HomeController extends Controller
       
 
 
-        //  $request->validate([
-        //     'file' => 'required|mimes:pdf,xlx,csv|max:2048',
-        // ]);
+         $request->validate([
+            'title' => 'required',
+            'description'=>'required'
+        ]);
       // echo  $img = Image::make($request->file('image')->getRealPath()); exit;
         $fileName='';
        if(!empty($image)){
